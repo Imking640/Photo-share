@@ -13,8 +13,8 @@ function App() {
 
       <div style={{ paddingTop: '0px' }}>
         <Routes>
-          <Route path="/"         element={<Feed />} />
-          <Route path="/login"    element={<Login />} />
+          <Route path="/"         element={<Login />} />
+          <Route path="/posts" element={<Feed />} />
           <Route path="/register" element={<Register />} />
           <Route path="/upload"   element={<Upload />} />
         </Routes>
