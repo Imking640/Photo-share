@@ -1,0 +1,75 @@
+/* src/pages/Login.css */
+
+.login-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(-45deg, #47fbe0, #c141f8, #fc5ace, #5999ff);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.login-card {
+  width: 380px;
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 30px;
+  padding-right: 45px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fafafa;
+  font-size: 14px;
+}
+
+.login-button {
+  margin-top: 14px;
+  margin-left: 10px;
+  padding: 10px;
+  width: 50%;
+  background-color: #0095f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.alt-login {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #0787ff;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.footer-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.footer-link a {
+  color: #0095f6;
+  text-decoration: none;
+  font-weight: 500;
+}
