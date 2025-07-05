@@ -142,7 +142,7 @@
 
 .feed-wrapper {
   min-height: 100vh;
-  background: linear-gradient(-45deg, #fbc2eb, #a6c1ee, #f6d365, #fdc3c3);
+  background: linear-gradient(-45deg, #fe31c4, #4287ff, #df00fd, #faff70);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
   display: flex;
@@ -208,7 +208,7 @@
 .upload-link {
   display: inline-block;
   margin-bottom: 20px;
-  color: #ff0050;
+  color: #000700;
   font-weight: bold;
   text-decoration: none;
 }
