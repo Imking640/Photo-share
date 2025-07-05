@@ -17,7 +17,7 @@ export default function Register() {
     e.preventDefault();
     try {
       await axios.post('http://localhost:5000/api/auth/register', form);
-      navigate('/login');
+      navigate('/posts');
     } catch {
       setError('Registration failed. Try again.');
     }
@@ -72,7 +72,7 @@ export default function Register() {
         {error && <p style={{ color: '#ed4956', marginTop: '10px' }}>{error}</p>}
 
         <div className="register-footer">
-          Already have an account? <Link to="/login">Log in</Link>
+          Already have an account? <Link to="/">Log in</Link>
         </div>
       </div>
     </div>

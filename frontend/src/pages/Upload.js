@@ -1,95 +1,98 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import './Login.css';
 
 export default function Upload() {
-  const [image, setImage] = useState(null);
+  const [image, setImage]     = useState(null);
+  const [preview, setPreview] = useState('');
   const [caption, setCaption] = useState('');
   const [message, setMessage] = useState('');
-  const { token } = useContext(AuthContext);
+  const fileInputRef          = useRef();
+  const navigate               = useNavigate();
+  const { token }             = useContext(AuthContext);
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setMessage('Only image files are allowed.');
+      return;
+    }
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
     setMessage('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!image || !caption) {
+    if (!image || !caption.trim()) {
       setMessage('Please select an image and enter a caption.');
       return;
     }
 
     const formData = new FormData();
     formData.append('image', image);
-    formData.append('caption', caption);
+    formData.append('caption', caption.trim());
 
     try {
-      await axios.post('http://localhost:5000/api/posts', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`
+      await axios.post(
+        'http://localhost:5000/api/posts',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       setMessage('✅ Post uploaded!');
       setImage(null);
+      setPreview('');
       setCaption('');
+      navigate('/posts');
     } catch (err) {
+      console.error(err);
       setMessage('❌ Upload failed. Try again.');
     }
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Upload a New Photo</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          style={styles.fileInput}
-        />
-        <input
-          type="text"
-          placeholder="Caption"
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          style={styles.captionInput}
-        />
-        <button type="submit" style={styles.button}>Post</button>
-      </form>
-      {message && <p style={styles.message}>{message}</p>}
-      {image && (
-        <div style={styles.preview}>
-          <p>Preview:</p>
-          <img
-            src={URL.createObjectURL(image)}
-            alt="Preview"
-            style={styles.imagePreview}
+    <div className="upload-wrapper">
+      <form className="upload-card" onSubmit={handleSubmit}>
+        <h2 className="upload-title">Share a New Photo</h2>
+
+        <div
+          className={`dropzone ${preview ? 'with-preview' : ''}`}
+          onClick={() => fileInputRef.current.click()}
+        >
+          {preview ? (
+            <img src={preview} alt="Preview" className="preview-img" />
+          ) : (
+            <p>Click or drag & drop to upload</p>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
           />
         </div>
-      )}
-    </div>
-  );
-}
 
-const styles = {
-  container: { maxWidth: '500px', margin: '30px auto', textAlign: 'center' },
-  heading: { marginBottom: '20px' },
-  form: { display: 'flex', flexDirection: 'column', gap: '10px' },
-  fileInput: { padding: '8px', borderRadius: '5px' },
-  captionInput: { padding: '8px', borderRadius: '5px' },
-  button: {
-    padding: '10px',
-    backgroundColor: '#4CAF50',
-    color: '#fff',
-    border: 'none',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    borderRadius: '5px'
-  },
-  message: { marginTop: '15px', color: '#333' },
-  preview: { marginTop: '20px' },
-  imagePreview: { maxWidth: '100%', borderRadius: '8px' }
-};
+        <textarea
+          className="caption-input"
+          placeholder="Write a caption..."
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+        />
+
+        <button type="submit" className="upload-button">
+          Post
+        </button>
+
+        {message && <p className="upload-message">{message}</p>}
+      </form>
+    </div>
+);
+}
